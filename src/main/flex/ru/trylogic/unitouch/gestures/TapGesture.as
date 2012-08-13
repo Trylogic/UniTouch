@@ -28,6 +28,7 @@ package ru.trylogic.unitouch.gestures
 				currentTouchPointID = touchPointID;
 				beginX = localX;
 				beginY = localY;
+				dispatchEvent(new Event("onPress"));
 			}
 		}
 
@@ -52,6 +53,7 @@ package ru.trylogic.unitouch.gestures
 			if(touchPointID == currentTouchPointID)
 			{
 				dispatchEvent(new Event("recognized"));
+				dispatchEvent(new Event("onRelease"));
 				trace("onTouchEndRecognized");
 			}
 
