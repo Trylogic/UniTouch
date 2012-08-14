@@ -3,17 +3,12 @@ package ru.trylogic.unitouch.gestures
 
 	import flash.events.Event;
 
-	import ru.trylogic.unitouch.gestures.*;
+	import ru.trylogic.unitouch.adapters.TouchContext;
 
-	[Event(name="recognized", type="flash.events.Event")]
+	[Event(name="complete", type="flash.events.Event")]
 	public class TapGesture extends AbstractGestureRecognizer
 	{
 		public var slop : uint = 10;
-
-		public var distance : Number = 0;
-
-		protected var beginX : Number = 0;
-		protected var beginY : Number = 0;
 
 		protected var currentTouchPointID : int = -1;
 
@@ -21,51 +16,48 @@ package ru.trylogic.unitouch.gestures
 		{
 		}
 
-		override public function onTouchBegin( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		override public function onTouchBegin( context : TouchContext ) : void
 		{
 			if(currentTouchPointID == -1)
 			{
-				currentTouchPointID = touchPointID;
-				beginX = localX;
-				beginY = localY;
+				currentTouchPointID = context.touchPointID;
 				dispatchEvent(new Event("onPress"));
+			}
+			else
+			{
+				onTouchCancel();
 			}
 		}
 
-		override public function onTouchMove( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		override public function onTouchMove( context : TouchContext ) : void
 		{
-			if(touchPointID != currentTouchPointID)
+			if(context.touchPointID != currentTouchPointID)
 			{
 				return;
 			}
 
-			var dx : Number = beginX - localX;
-			var dy : Number = beginY - localY;
-			distance = Math.sqrt(dx * dx - dy * dy);
+			var dx : Number = context.beginX - context.localX;
+			var dy : Number = context.beginY - context.localY;
+			var distance : Number = Math.sqrt(dx * dx - dy * dy);
 			if(distance > slop)
 			{
-				cancel();
+				onTouchCancel();
 			}
 		}
 
-		override public function onTouchEnd( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		override public function onTouchEnd( context : TouchContext ) : void
 		{
-			if(touchPointID == currentTouchPointID)
+			if(context.touchPointID == currentTouchPointID)
 			{
-				dispatchEvent(new Event("recognized"));
+				dispatchEvent(new Event(Event.COMPLETE));
 				dispatchEvent(new Event("onRelease"));
-				trace("onTouchEndRecognized");
+				currentTouchPointID = -1;
 			}
-
-			trace("onTouchEnd");
-			distance = 0;
-			currentTouchPointID = -1;
 		}
 
-		override protected function cancel() : void
+		override protected function onTouchCancel() : void
 		{
 			trace("canceled");
-			distance = 0;
 			currentTouchPointID = -1;
 		}
 	}

@@ -2,6 +2,7 @@ package ru.trylogic.unitouch
 {
 
 	import ru.trylogic.unitouch.adapters.ITouchAdapter;
+	import ru.trylogic.unitouch.adapters.TouchContext;
 	import ru.trylogic.unitouch.gestures.AbstractGestureRecognizer;
 
 	import tl.ioc.IoCHelper;
@@ -19,50 +20,50 @@ package ru.trylogic.unitouch
 			return _target;
 		}
 
-		public function UniTouchProcessor(source : *)
+		public function UniTouchProcessor( source : * )
 		{
 			_target = source;
-			touchAdapter = IoCHelper.resolve(ITouchAdapter, this);
+			touchAdapter = IoCHelper.resolve( ITouchAdapter, this );
 		}
 
-		public function onTouchBegin( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public function onTouchBegin( context : TouchContext ) : void
 		{
-			for each(var gestureRecognizer : AbstractGestureRecognizer in gestureRecognizers)
+			for each( var gestureRecognizer : AbstractGestureRecognizer in gestureRecognizers )
 			{
-				gestureRecognizer.onTouchBegin( touchPointID, localX, localY, stageX, stageY );
+				gestureRecognizer.onTouchBegin( context );
 			}
 		}
 
-		public function onTouchMove( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public function onTouchMove( context : TouchContext ) : void
 		{
-			for each(var gestureRecognizer : AbstractGestureRecognizer in gestureRecognizers)
+			for each( var gestureRecognizer : AbstractGestureRecognizer in gestureRecognizers )
 			{
-				gestureRecognizer.onTouchMove( touchPointID, localX, localY, stageX, stageY );
+				gestureRecognizer.onTouchMove( context );
 			}
 		}
 
-		public function onTouchEnd( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public function onTouchEnd( context : TouchContext ) : void
 		{
-			for each(var gestureRecognizer : AbstractGestureRecognizer in gestureRecognizers)
+			for each( var gestureRecognizer : AbstractGestureRecognizer in gestureRecognizers )
 			{
-				gestureRecognizer.onTouchEnd( touchPointID, localX, localY, stageX, stageY );
+				gestureRecognizer.onTouchEnd( context );
 			}
 		}
 
 		public function addGestureRecognizer( gestureRecognizer : AbstractGestureRecognizer ) : void
 		{
-			if(gestureRecognizers.indexOf(gestureRecognizer) == -1)
+			if ( gestureRecognizers.indexOf( gestureRecognizer ) == -1 )
 			{
 				// TODO: support for priorities
-				gestureRecognizers.push(gestureRecognizer);
+				gestureRecognizers.push( gestureRecognizer );
 			}
 		}
 
 		public function removeGestureRecognizer( gestureRecognizer : AbstractGestureRecognizer ) : void
 		{
-			if(gestureRecognizers.indexOf(gestureRecognizer) != -1)
+			if ( gestureRecognizers.indexOf( gestureRecognizer ) != -1 )
 			{
-				gestureRecognizers.splice(gestureRecognizers.indexOf(gestureRecognizer), 1);
+				gestureRecognizers.splice( gestureRecognizers.indexOf( gestureRecognizer ), 1 );
 			}
 		}
 	}

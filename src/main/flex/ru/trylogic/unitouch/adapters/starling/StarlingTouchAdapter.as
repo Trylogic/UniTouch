@@ -6,6 +6,9 @@ package ru.trylogic.unitouch.adapters.starling
 	import ru.trylogic.unitouch.ITouchProcessor;
 	import ru.trylogic.unitouch.adapters.AbstractTouchAdapter;
 
+	import starling.core.Starling;
+	import starling.display.DisplayObject;
+
 	import starling.events.Touch;
 
 	import starling.events.TouchEvent;
@@ -13,21 +16,21 @@ package ru.trylogic.unitouch.adapters.starling
 
 	public class StarlingTouchAdapter extends AbstractTouchAdapter
 	{
+		private const ZERO_POINT : Point = new Point( 0, 0 );
+
 		public function StarlingTouchAdapter( touchProcessor : ITouchProcessor )
 		{
 			super( touchProcessor );
 		}
 
-		override public function processEventListeners( action : uint ) : void
+		override public function addEventListeners() : void
 		{
 			if ( _target == null )
 			{
 				return;
 			}
 
-			var func : Function = action == ADD_LISTENERS ? _target.addEventListener : _target.removeEventListener;
-
-			func( TouchEvent.TOUCH, onStarlingTouch );
+			_target.addEventListener( TouchEvent.TOUCH, onStarlingTouch );
 		}
 
 		protected function onStarlingTouch( e : TouchEvent ) : void
@@ -41,16 +44,36 @@ package ru.trylogic.unitouch.adapters.starling
 					case TouchPhase.BEGAN:
 					{
 						onTouchBegin( touch.id, location.x, location.y, touch.globalX, touch.globalY );
+						if(numTouches == 1)
+						{
+							Starling.current.stage.addEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
+						}
 					}
 						break;
+				}
+			}
+		}
+
+		protected function onStarlingStageTouch( e : TouchEvent ) : void
+		{
+			var touch : Touch = e.getTouch( Starling.current.stage );
+			if ( touch )
+			{
+				var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
+				switch ( touch.phase )
+				{
 					case TouchPhase.MOVED:
 					{
-						onTouchMove( touch.id, location.x, location.y, touch.globalX, touch.globalY );
+						onTouchMove( touch.id, touch.globalX - location.x, touch.globalY - location.y, touch.globalX, touch.globalY );
 					}
 						break;
 					case TouchPhase.ENDED:
 					{
-						onTouchEnd( touch.id, location.x, location.y, touch.globalX, touch.globalY );
+						onTouchEnd( touch.id, touch.globalX - location.x, touch.globalY - location.y, touch.globalX, touch.globalY );
+						if(numTouches == 0)
+						{
+							Starling.current.stage.removeEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
+						}
 					}
 						break;
 				}

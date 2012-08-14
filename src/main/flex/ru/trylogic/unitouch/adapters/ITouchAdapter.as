@@ -3,7 +3,7 @@ package ru.trylogic.unitouch.adapters
 
 	import ru.trylogic.unitouch.ITouchListener;
 
-	public interface ITouchAdapter extends ITouchListener
+	public interface ITouchAdapter
 	{
 	}
 }

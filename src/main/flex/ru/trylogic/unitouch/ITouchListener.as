@@ -1,10 +1,12 @@
 package ru.trylogic.unitouch
 {
 
+	import ru.trylogic.unitouch.adapters.TouchContext;
+
 	public interface ITouchListener
 	{
-		function onTouchBegin( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void;
-		function onTouchMove( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void;
-		function onTouchEnd( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void;
+		function onTouchBegin( context : TouchContext ) : void;
+		function onTouchMove( context : TouchContext ) : void;
+		function onTouchEnd( context : TouchContext ) : void;
 	}
 }

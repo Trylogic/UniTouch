@@ -7,29 +7,39 @@ package ru.trylogic.unitouch.gestures
 	import ru.trylogic.unitouch.ITouchListener;
 	import ru.trylogic.unitouch.ITouchProcessor;
 	import ru.trylogic.unitouch.UniTouchProcessor;
+	import ru.trylogic.unitouch.adapters.TouchContext;
 
 	public class AbstractGestureRecognizer extends EventDispatcher implements ITouchListener
 	{
 		protected static const touchProcessorsByTarget : Dictionary = new Dictionary( true );
-		protected var _source : *;
+		protected var _target : *;
 
-		protected var _listener : Function;
-
-		public function set source( value : * ) : void
+		public function set target( value : * ) : void
 		{
-			if ( value == _source )
+			if ( value == _target )
 			{
 				return;
 			}
 
-			_source = value;
+			var touchProcessor : ITouchProcessor;
 
-			if ( _source )
+			if ( _target )
 			{
-				var touchProcessor : ITouchProcessor = touchProcessorsByTarget[_source];
+				touchProcessor = touchProcessorsByTarget[_target];
+				if ( touchProcessor )
+				{
+					touchProcessor.removeGestureRecognizer( this );
+				}
+			}
+
+			_target = value;
+
+			if ( _target )
+			{
+				touchProcessor = touchProcessorsByTarget[_target];
 				if ( !touchProcessor )
 				{
-					touchProcessorsByTarget[_source] = touchProcessor = new UniTouchProcessor( _source );
+					touchProcessorsByTarget[_target] = touchProcessor = new UniTouchProcessor( _target );
 				}
 
 				touchProcessor.addGestureRecognizer( this );
@@ -40,19 +50,19 @@ package ru.trylogic.unitouch.gestures
 		{
 		}
 
-		public function onTouchBegin( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public function onTouchBegin( context : TouchContext ) : void
 		{
 		}
 
-		public function onTouchMove( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public function onTouchMove( context : TouchContext ) : void
 		{
 		}
 
-		public function onTouchEnd( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public function onTouchEnd( context : TouchContext ) : void
 		{
 		}
 
-		protected function cancel() : void
+		protected function onTouchCancel() : void
 		{
 
 		}
