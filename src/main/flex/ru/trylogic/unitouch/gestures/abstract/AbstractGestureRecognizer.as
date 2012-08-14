@@ -74,25 +74,26 @@ package ru.trylogic.unitouch.gestures.abstract
 					currentState == GestureStates.RECOGNIZED;
 		}
 
-		protected function setState( newState : GestureState ) : Boolean
+		protected function setState( newState : GestureState ) : void
 		{
 			if ( newState == null )
 			{
-				return false;
+				return;
 			}
 
 			var oldState : GestureState = _currentState;
 
 			if ( _currentState && !_currentState.nextStateAllowed( newState ) )
 			{
-				_currentState = GestureStates.FAILED;
-				stateChanged( oldState, _currentState );
-				return false;
+				newState = GestureStates.FAILED;
 			}
 
 			_currentState = newState;
+			if(hasEventListener(_currentState.toString()))
+			{
+				dispatchEvent(new GestureEvent(_currentState.toString()));
+			}
 			stateChanged( oldState, _currentState );
-			return true;
 		}
 
 		protected function stateChanged( oldState : GestureState, newState : GestureState ) : void
@@ -102,14 +103,14 @@ package ru.trylogic.unitouch.gestures.abstract
 
 		public final function onTouchBegin( context : TouchContext ) : void
 		{
-			setState( internalOnTouchBegin( context ) );
+			internalOnTouchBegin( context );
 		}
 
 		public final function onTouchMove( context : TouchContext ) : void
 		{
 			if(!isGestureIsOver())
 			{
-				setState( internalOnTouchMove( context ) );
+				internalOnTouchMove( context );
 			}
 		}
 
@@ -117,23 +118,20 @@ package ru.trylogic.unitouch.gestures.abstract
 		{
 			if(!isGestureIsOver())
 			{
-				setState( internalOnTouchEnd( context ) );
+				internalOnTouchEnd( context );
 			}
 		}
 
-		protected function internalOnTouchBegin( context : TouchContext ) : GestureState
+		protected function internalOnTouchBegin( context : TouchContext ) : void
 		{
-			return null;
 		}
 
-		protected function internalOnTouchMove( context : TouchContext ) : GestureState
+		protected function internalOnTouchMove( context : TouchContext ) : void
 		{
-			return null;
 		}
 
-		protected function internalOnTouchEnd( context : TouchContext ) : GestureState
+		protected function internalOnTouchEnd( context : TouchContext ) : void
 		{
-			return null;
 		}
 	}
 }

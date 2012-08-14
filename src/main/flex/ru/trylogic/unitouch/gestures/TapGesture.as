@@ -21,34 +21,22 @@ package ru.trylogic.unitouch.gestures
 			setState( GestureStates.FAILED );
 		}
 
-		override protected function internalOnTouchMove( context : TouchContext ) : GestureState
+		override protected function internalOnTouchMove( context : TouchContext ) : void
 		{
-			if ( context.touchPointID == currentTouchPointID )
+			if ( context == currentTouchContext )
 			{
 				if ( calculateDistance( context ) > slop )
 				{
-					return GestureStates.FAILED;
+					setState( GestureStates.FAILED );
 				}
-				else
-				{
-					return null;
-				}
-			}
-			else
-			{
-				return GestureStates.FAILED;
 			}
 		}
 
-		override protected function internalOnTouchEnd( context : TouchContext ) : GestureState
+		override protected function internalOnTouchEnd( context : TouchContext ) : void
 		{
-			if ( context.touchPointID == currentTouchPointID )
+			if ( context == currentTouchContext )
 			{
-				return GestureStates.RECOGNIZED;
-			}
-			else
-			{
-				return GestureStates.FAILED;
+				setState( GestureStates.RECOGNIZED );
 			}
 		}
 

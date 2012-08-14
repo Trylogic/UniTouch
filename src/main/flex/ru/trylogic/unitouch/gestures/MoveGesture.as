@@ -8,15 +8,20 @@ package ru.trylogic.unitouch.gestures
 
 	public class MoveGesture extends AbstractGestureRecognizer
 	{
-		public var slop : uint = 50;
+		public var slop : uint = 5;
 
-		protected var currentTouchPointID : int = -1;
+		protected var _currentTouchContext : TouchContext;
+
+		public function get currentTouchContext() : TouchContext
+		{
+			return _currentTouchContext;
+		}
 
 		public function MoveGesture()
 		{
 		}
 
-		protected function calculateDistance(context : TouchContext) : Number
+		protected function calculateDistance( context : TouchContext ) : Number
 		{
 			var dx : Number = context.beginX - context.localX;
 			var dy : Number = context.beginY - context.localY;
@@ -24,54 +29,49 @@ package ru.trylogic.unitouch.gestures
 			return Math.sqrt( dx * dx - dy * dy );
 		}
 
-		override protected function internalOnTouchBegin( context : TouchContext ) : GestureState
+		override protected function internalOnTouchBegin( context : TouchContext ) : void
 		{
-			if ( currentTouchPointID == -1 )
+			if ( _currentTouchContext == null )
 			{
-				currentTouchPointID = context.touchPointID;
-				return GestureStates.POSSIBLE;
+				_currentTouchContext = context;
+				setState( GestureStates.POSSIBLE );
 			}
 			else
 			{
-				return GestureStates.FAILED;
+				setState( GestureStates.FAILED );
 			}
 		}
 
-		override protected function internalOnTouchMove( context : TouchContext ) : GestureState
+		override protected function internalOnTouchMove( context : TouchContext ) : void
 		{
-			if ( context.touchPointID == currentTouchPointID )
+			if ( context == _currentTouchContext )
 			{
 				if ( currentState == GestureStates.CHANGED || currentState == GestureStates.BEGAN )
 				{
-					return GestureStates.CHANGED;
+					setState( GestureStates.CHANGED );
 				}
 				else
 				{
-					if ( calculateDistance(context) > slop )
+					if ( calculateDistance( context ) > slop )
 					{
-						return GestureStates.BEGAN;
-					}
-					else
-					{
-						return null;
+						setState( GestureStates.BEGAN );
 					}
 				}
 			}
-			else
-			{
-				return GestureStates.FAILED;
-			}
 		}
 
-		override protected function internalOnTouchEnd( context : TouchContext ) : GestureState
+		override protected function internalOnTouchEnd( context : TouchContext ) : void
 		{
-			if ( currentState == GestureStates.POSSIBLE )
+			if ( context == _currentTouchContext )
 			{
-				return GestureStates.FAILED;
-			}
-			else
-			{
-				return GestureStates.RECOGNIZED;
+				if ( currentState == GestureStates.POSSIBLE )
+				{
+					setState(GestureStates.FAILED);
+				}
+				else
+				{
+					setState(GestureStates.RECOGNIZED);
+				}
 			}
 		}
 
@@ -81,7 +81,7 @@ package ru.trylogic.unitouch.gestures
 
 			if ( isGestureIsOver() )
 			{
-				currentTouchPointID = -1;
+				_currentTouchContext = null;
 			}
 		}
 	}

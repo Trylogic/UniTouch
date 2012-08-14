@@ -3,7 +3,6 @@ package ru.trylogic.unitouch.gestures.abstract
 
 	import flash.events.Event;
 
-	import ru.trylogic.unitouch.adapters.TouchContext;
 	import ru.trylogic.unitouch.gestures.abstract.states.GestureStates;
 
 	public class GestureEvent extends Event
@@ -13,19 +12,11 @@ package ru.trylogic.unitouch.gestures.abstract
 		public static const RECOGNIZED : String = GestureStates.RECOGNIZED.toString();
 		public static const FAILED : String = GestureStates.FAILED.toString();
 		public static const CANCELED : String = GestureStates.CANCELED.toString();
+		public static const POSSIBLE : String = GestureStates.POSSIBLE.toString();
 
-		protected var _touchContext : TouchContext;
-
-		public function get touchContext() : TouchContext
-		{
-			return _touchContext;
-		}
-
-		public function GestureEvent( type : String, touchContext : TouchContext )
+		public function GestureEvent( type : String )
 		{
 			super( type, false, false );
-
-			this._touchContext = touchContext;
 		}
 	}
 }
