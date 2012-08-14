@@ -1,7 +1,7 @@
 package ru.trylogic.unitouch
 {
 
-	import ru.trylogic.unitouch.gestures.AbstractGestureRecognizer;
+	import ru.trylogic.unitouch.gestures.abstract.AbstractGestureRecognizer;
 
 	public interface ITouchProcessor extends ITouchListener
 	{

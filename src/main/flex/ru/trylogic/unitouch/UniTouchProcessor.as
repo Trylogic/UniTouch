@@ -3,7 +3,7 @@ package ru.trylogic.unitouch
 
 	import ru.trylogic.unitouch.adapters.ITouchAdapter;
 	import ru.trylogic.unitouch.adapters.TouchContext;
-	import ru.trylogic.unitouch.gestures.AbstractGestureRecognizer;
+	import ru.trylogic.unitouch.gestures.abstract.AbstractGestureRecognizer;
 
 	import tl.ioc.IoCHelper;
 

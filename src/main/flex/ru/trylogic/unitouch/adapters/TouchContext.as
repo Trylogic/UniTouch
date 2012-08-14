@@ -47,10 +47,6 @@ package ru.trylogic.unitouch.adapters
 			pool.push(touchContext);
 		}
 
-		public function TouchContext( )
-		{
-		}
-
 		public function get touchPointID() : int
 		{
 			return _touchPointID;
@@ -89,6 +85,15 @@ package ru.trylogic.unitouch.adapters
 		public function get beginY() : Number
 		{
 			return _beginY;
+		}
+
+		public function TouchContext( )
+		{
+		}
+
+		public function toString() : String
+		{
+			return "[TouchContext forTouchPointID: " + _touchPointID + " and target: " + _target + " ]";
 		}
 	}
 }

@@ -1,64 +1,71 @@
 package ru.trylogic.unitouch.gestures
 {
 
-	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 
 	import ru.trylogic.unitouch.adapters.TouchContext;
+	import ru.trylogic.unitouch.gestures.abstract.states.*;
 
-	[Event(name="complete", type="flash.events.Event")]
-	public class TapGesture extends AbstractGestureRecognizer
+	public class TapGesture extends MoveGesture
 	{
-		public var slop : uint = 10;
-
-		protected var currentTouchPointID : int = -1;
+		protected var tapTimer : Timer = new Timer( 3000, 1 );
 
 		public function TapGesture()
 		{
+			tapTimer.addEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
 		}
 
-		override public function onTouchBegin( context : TouchContext ) : void
+		protected function tapTimer_timerComplete( event : TimerEvent ) : void
 		{
-			if(currentTouchPointID == -1)
+			setState( GestureStates.FAILED );
+		}
+
+		override protected function internalOnTouchMove( context : TouchContext ) : GestureState
+		{
+			if ( context.touchPointID == currentTouchPointID )
 			{
-				currentTouchPointID = context.touchPointID;
-				dispatchEvent(new Event("onPress"));
+				if ( calculateDistance( context ) > slop )
+				{
+					return GestureStates.FAILED;
+				}
+				else
+				{
+					return null;
+				}
 			}
 			else
 			{
-				onTouchCancel();
+				return GestureStates.FAILED;
 			}
 		}
 
-		override public function onTouchMove( context : TouchContext ) : void
+		override protected function internalOnTouchEnd( context : TouchContext ) : GestureState
 		{
-			if(context.touchPointID != currentTouchPointID)
+			if ( context.touchPointID == currentTouchPointID )
 			{
-				return;
+				return GestureStates.RECOGNIZED;
 			}
-
-			var dx : Number = context.beginX - context.localX;
-			var dy : Number = context.beginY - context.localY;
-			var distance : Number = Math.sqrt(dx * dx - dy * dy);
-			if(distance > slop)
+			else
 			{
-				onTouchCancel();
+				return GestureStates.FAILED;
 			}
 		}
 
-		override public function onTouchEnd( context : TouchContext ) : void
+		override protected function stateChanged( oldState : GestureState, newState : GestureState ) : void
 		{
-			if(context.touchPointID == currentTouchPointID)
-			{
-				dispatchEvent(new Event(Event.COMPLETE));
-				dispatchEvent(new Event("onRelease"));
-				currentTouchPointID = -1;
-			}
-		}
+			super.stateChanged( oldState, newState );
 
-		override protected function onTouchCancel() : void
-		{
-			trace("canceled");
-			currentTouchPointID = -1;
+			if ( currentState == GestureStates.POSSIBLE )
+			{
+				tapTimer.start();
+			}
+
+			if ( isGestureIsOver() )
+			{
+				tapTimer.stop();
+				tapTimer.reset();
+			}
 		}
 	}
 }
