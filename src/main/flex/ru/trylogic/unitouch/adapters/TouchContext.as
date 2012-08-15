@@ -18,9 +18,12 @@ package ru.trylogic.unitouch.adapters
 		internal var _beginX : Number = 0;
 		internal var _beginY : Number = 0;
 
+		internal var _beginStageX : Number = 0;
+		internal var _beginStageY : Number = 0;
+
 		public static function pop() : TouchContext
 		{
-			if(pool.length == 0)
+			if ( pool.length == 0 )
 			{
 				return new TouchContext();
 			}
@@ -30,7 +33,7 @@ package ru.trylogic.unitouch.adapters
 			}
 		}
 
-		public static function push(touchContext : TouchContext) : void
+		public static function push( touchContext : TouchContext ) : void
 		{
 			touchContext._touchPointID = -1;
 
@@ -44,7 +47,10 @@ package ru.trylogic.unitouch.adapters
 
 			touchContext._beginX = 0;
 			touchContext._beginY = 0;
-			pool.push(touchContext);
+
+			touchContext._beginStageX = 0;
+			touchContext._beginStageY = 0;
+			pool.push( touchContext );
 		}
 
 		public function get touchPointID() : int
@@ -87,7 +93,17 @@ package ru.trylogic.unitouch.adapters
 			return _beginY;
 		}
 
-		public function TouchContext( )
+		public function get beginStageX() : Number
+		{
+			return _beginStageX;
+		}
+
+		public function get beginStageY() : Number
+		{
+			return _beginStageY;
+		}
+
+		public function TouchContext()
 		{
 		}
 

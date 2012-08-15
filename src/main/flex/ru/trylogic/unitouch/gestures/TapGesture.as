@@ -25,7 +25,7 @@ package ru.trylogic.unitouch.gestures
 		{
 			if ( context == currentTouchContext )
 			{
-				if ( calculateDistance( context ) > slop )
+				if ( slop == 0 || calculateDistance( context ) > slop )
 				{
 					setState( GestureStates.FAILED );
 				}

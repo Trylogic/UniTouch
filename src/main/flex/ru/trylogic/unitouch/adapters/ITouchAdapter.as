@@ -1,10 +1,9 @@
 package ru.trylogic.unitouch.adapters
 {
 
-	import ru.trylogic.unitouch.ITouchListener;
-
 	public interface ITouchAdapter
 	{
+		function set target( target : * ) : void;
 	}
 }
 

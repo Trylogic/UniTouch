@@ -1,6 +1,8 @@
 package ru.trylogic.unitouch.gestures
 {
 
+	import flash.system.Capabilities;
+
 	import ru.trylogic.unitouch.adapters.TouchContext;
 	import ru.trylogic.unitouch.gestures.abstract.AbstractGestureRecognizer;
 	import ru.trylogic.unitouch.gestures.abstract.states.GestureState;
@@ -8,7 +10,7 @@ package ru.trylogic.unitouch.gestures
 
 	public class MoveGesture extends AbstractGestureRecognizer
 	{
-		public var slop : uint = 5;
+		public var slop : uint = 4 * Math.round( 20 / 252 * flash.system.Capabilities.screenDPI );
 
 		protected var _currentTouchContext : TouchContext;
 
@@ -23,10 +25,10 @@ package ru.trylogic.unitouch.gestures
 
 		protected function calculateDistance( context : TouchContext ) : Number
 		{
-			var dx : Number = context.beginX - context.localX;
-			var dy : Number = context.beginY - context.localY;
+			const dx : Number = context.beginStageX - context.stageX;
+			const dy : Number = context.beginStageY - context.stageY;
 
-			return Math.sqrt( dx * dx - dy * dy );
+			return Math.sqrt( dx * dx + dy * dy );
 		}
 
 		override protected function internalOnTouchBegin( context : TouchContext ) : void
@@ -52,7 +54,7 @@ package ru.trylogic.unitouch.gestures
 				}
 				else
 				{
-					if ( calculateDistance( context ) > slop )
+					if ( slop == 0 || calculateDistance( context ) > slop )
 					{
 						setState( GestureStates.BEGAN );
 					}
@@ -66,11 +68,11 @@ package ru.trylogic.unitouch.gestures
 			{
 				if ( currentState == GestureStates.POSSIBLE )
 				{
-					setState(GestureStates.FAILED);
+					setState( GestureStates.FAILED );
 				}
 				else
 				{
-					setState(GestureStates.RECOGNIZED);
+					setState( GestureStates.RECOGNIZED );
 				}
 			}
 		}

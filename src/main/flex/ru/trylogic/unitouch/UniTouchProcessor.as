@@ -13,17 +13,10 @@ package ru.trylogic.unitouch
 
 		protected const gestureRecognizers : Vector.<AbstractGestureRecognizer> = new Vector.<AbstractGestureRecognizer>();
 
-		private var _target : *;
-
-		public function get target() : *
-		{
-			return _target;
-		}
-
 		public function UniTouchProcessor( source : * )
 		{
-			_target = source;
 			touchAdapter = IoCHelper.resolve( ITouchAdapter, this );
+			touchAdapter.target = source;
 		}
 
 		public function onTouchBegin( context : TouchContext ) : void

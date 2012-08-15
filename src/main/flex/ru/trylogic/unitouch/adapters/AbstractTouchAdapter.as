@@ -2,13 +2,9 @@ package ru.trylogic.unitouch.adapters
 {
 
 	import ru.trylogic.unitouch.ITouchProcessor;
-	import ru.trylogic.unitouch.adapters.TouchContext;
 
 	public class AbstractTouchAdapter implements ITouchAdapter
 	{
-		public const ADD_LISTENERS : uint = 0;
-		public const REMOVE_LISTENERS : uint = 1;
-
 		protected var _target : *;
 
 		protected var _touchProcessor : ITouchProcessor;
@@ -17,23 +13,41 @@ package ru.trylogic.unitouch.adapters
 
 		protected var numTouches : int = 0;
 
-		public function AbstractTouchAdapter( touchProcessor : ITouchProcessor )
+		public function set target( value : * ) : void
 		{
-			_touchProcessor = touchProcessor;
-
-			_target = touchProcessor.target;
+			if ( value == _target )
+			{
+				return;
+			}
 
 			if ( _target )
 			{
-				addEventListeners( );
+				removeEventListeners();
+				for ( var key : String in _touchContexts )
+				{
+					TouchContext.push( _touchContexts[key] );
+				}
+
+				_touchContexts = [];
+			}
+
+			_target = value;
+			if ( _target )
+			{
+				addEventListeners();
 			}
 		}
 
-		public function addEventListeners( ) : void
+		public function AbstractTouchAdapter( touchProcessor : ITouchProcessor )
+		{
+			_touchProcessor = touchProcessor;
+		}
+
+		public function addEventListeners() : void
 		{
 		}
 
-		public function removeEventListeners( ) : void
+		public function removeEventListeners() : void
 		{
 		}
 
@@ -44,18 +58,24 @@ package ru.trylogic.unitouch.adapters
 				var touchContext : TouchContext = getContextByTouchPointID( touchPointID );
 				touchContext._beginX = touchContext._localX = localX;
 				touchContext._beginY = touchContext._localY = localY;
-				touchContext._stageX = stageX;
-				touchContext._stageY = stageY;
+				touchContext._beginStageX = touchContext._stageX = stageX;
+				touchContext._beginStageY = touchContext._stageY = stageY;
 				_touchProcessor.onTouchBegin( touchContext );
 			}
+
 			numTouches++;
 		}
 
 		public final function onTouchMove( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
 		{
+			const touchContext : TouchContext = _touchContexts[touchPointID];
+			if ( touchContext == null )
+			{
+				return;
+			}
+
 			if ( _touchProcessor )
 			{
-				var touchContext : TouchContext = getContextByTouchPointID(touchPointID);
 				touchContext._localX = localX;
 				touchContext._localY = localY;
 				touchContext._stageX = stageX;
@@ -66,17 +86,23 @@ package ru.trylogic.unitouch.adapters
 
 		public final function onTouchEnd( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
 		{
+			const touchContext : TouchContext = _touchContexts[touchPointID];
+			if ( touchContext == null )
+			{
+				return;
+			}
+
 			if ( _touchProcessor )
 			{
-				var touchContext : TouchContext = getContextByTouchPointID(touchPointID);
 				touchContext._localX = localX;
 				touchContext._localY = localY;
 				touchContext._stageX = stageX;
 				touchContext._stageY = stageY;
 				_touchProcessor.onTouchEnd( touchContext );
-				TouchContext.push(touchContext);
+				TouchContext.push( touchContext );
 				delete _touchContexts[touchPointID];
 			}
+
 			numTouches--;
 		}
 
