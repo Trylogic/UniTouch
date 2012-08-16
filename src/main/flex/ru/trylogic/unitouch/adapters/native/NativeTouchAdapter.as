@@ -17,27 +17,39 @@ package ru.trylogic.unitouch.adapters.native
 	{
 		private const ZERO_POINT : Point = new Point( 0, 0 );
 
-		private static const stage : Stage = IoCHelper.resolve(Stage, NativeTouchAdapter);
+		private static const stage : Stage = IoCHelper.resolve( Stage, NativeTouchAdapter );
 
 		public function NativeTouchAdapter( touchProcessor : ITouchProcessor )
 		{
 			super( touchProcessor );
 		}
 
-		override public function addEventListeners( ) : void
+		override public function addEventListeners() : void
 		{
 			if ( _target == null )
 			{
 				return;
 			}
 
-			_target.addEventListener( TouchEvent.TOUCH_BEGIN, onNativeTouchBegin );
+			_target.addEventListener( TouchEvent.TOUCH_BEGIN, onNativeTouchBegin, false, 0, true );
+		}
+
+		override public function removeEventListeners() : void
+		{
+			if ( _target == null )
+			{
+				return;
+			}
+
+			_target.removeEventListener( TouchEvent.TOUCH_BEGIN, onNativeTouchBegin );
+			stage.removeEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );
+			stage.removeEventListener( TouchEvent.TOUCH_END, onNativeTouchEnd );
 		}
 
 		protected function onNativeTouchBegin( e : TouchEvent ) : void
 		{
 			onTouchBegin( e.touchPointID, e.localX, e.localY, e.stageX, e.stageY );
-			if(numTouches == 1)
+			if ( numTouches == 1 )
 			{
 				stage.addEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );
 				stage.addEventListener( TouchEvent.TOUCH_END, onNativeTouchEnd );
@@ -46,15 +58,15 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onNativeTouchMove( e : TouchEvent ) : void
 		{
-			var location : Point = (_target as DisplayObject).localToGlobal(ZERO_POINT);
+			var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
 			onTouchMove( e.touchPointID, e.stageX - location.x, e.stageY - location.y, e.stageX, e.stageY );
 		}
 
 		protected function onNativeTouchEnd( e : TouchEvent ) : void
 		{
-			var location : Point = (_target as DisplayObject).localToGlobal(ZERO_POINT);
+			var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
 			onTouchEnd( e.touchPointID, e.stageX - location.x, e.stageY - location.y, e.stageX, e.stageY );
-			if(numTouches == 0)
+			if ( numTouches == 0 )
 			{
 				stage.removeEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );
 				stage.removeEventListener( TouchEvent.TOUCH_END, onNativeTouchEnd );

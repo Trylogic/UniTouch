@@ -8,5 +8,9 @@ package ru.trylogic.unitouch
 		function addGestureRecognizer( gestureRecognizer : AbstractGestureRecognizer ) : void;
 
 		function removeGestureRecognizer( gestureRecognizer : AbstractGestureRecognizer ) : void;
+
+		function get numRecognizers() : uint;
+
+		function dispose() : void;
 	}
 }

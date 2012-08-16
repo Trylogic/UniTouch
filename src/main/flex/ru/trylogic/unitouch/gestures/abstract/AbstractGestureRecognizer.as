@@ -29,13 +29,13 @@ package ru.trylogic.unitouch.gestures.abstract
 			return _currentState;
 		}
 
+		public function get target() : *
+		{
+			return _target;
+		}
+
 		public function set target( value : * ) : void
 		{
-			if ( value == _target )
-			{
-				return;
-			}
-
 			var touchProcessor : ITouchProcessor;
 
 			if ( _target )
@@ -44,6 +44,11 @@ package ru.trylogic.unitouch.gestures.abstract
 				if ( touchProcessor )
 				{
 					touchProcessor.removeGestureRecognizer( this );
+					if ( touchProcessor.numRecognizers == 0 )
+					{
+						touchProcessor.dispose();
+						delete touchProcessorsByTarget[_target];
+					}
 				}
 
 				setState( GestureStates.POSSIBLE );
@@ -65,6 +70,33 @@ package ru.trylogic.unitouch.gestures.abstract
 
 		public function AbstractGestureRecognizer()
 		{
+		}
+
+		public function dispose() : void
+		{
+			var touchProcessor : ITouchProcessor = touchProcessorsByTarget[_target];
+			target = null;
+		}
+
+		public function onTouchBegin( context : TouchContext ) : void
+		{
+			internalOnTouchBegin( context );
+		}
+
+		public function onTouchMove( context : TouchContext ) : void
+		{
+			if ( !isGestureIsOver() )
+			{
+				internalOnTouchMove( context );
+			}
+		}
+
+		public function onTouchEnd( context : TouchContext ) : void
+		{
+			if ( !isGestureIsOver() )
+			{
+				internalOnTouchEnd( context );
+			}
 		}
 
 		protected function isGestureIsOver() : Boolean
@@ -89,9 +121,9 @@ package ru.trylogic.unitouch.gestures.abstract
 			}
 
 			_currentState = newState;
-			if(hasEventListener(_currentState.toString()))
+			if ( hasEventListener( _currentState.toString() ) )
 			{
-				dispatchEvent(new GestureEvent(_currentState.toString()));
+				dispatchEvent( new GestureEvent( _currentState.toString() ) );
 			}
 			stateChanged( oldState, _currentState );
 		}
@@ -99,27 +131,6 @@ package ru.trylogic.unitouch.gestures.abstract
 		protected function stateChanged( oldState : GestureState, newState : GestureState ) : void
 		{
 			trace( this, oldState, "->", newState );
-		}
-
-		public final function onTouchBegin( context : TouchContext ) : void
-		{
-			internalOnTouchBegin( context );
-		}
-
-		public final function onTouchMove( context : TouchContext ) : void
-		{
-			if(!isGestureIsOver())
-			{
-				internalOnTouchMove( context );
-			}
-		}
-
-		public final function onTouchEnd( context : TouchContext ) : void
-		{
-			if(!isGestureIsOver())
-			{
-				internalOnTouchEnd( context );
-			}
 		}
 
 		protected function internalOnTouchBegin( context : TouchContext ) : void

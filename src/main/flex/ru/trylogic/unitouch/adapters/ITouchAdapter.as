@@ -4,6 +4,8 @@ package ru.trylogic.unitouch.adapters
 	public interface ITouchAdapter
 	{
 		function set target( target : * ) : void;
+
+		function dispose() : void;
 	}
 }
 

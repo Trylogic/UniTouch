@@ -30,7 +30,18 @@ package ru.trylogic.unitouch.adapters.starling
 				return;
 			}
 
-			_target.addEventListener( TouchEvent.TOUCH, onStarlingTouch );
+			_target.addEventListener( TouchEvent.TOUCH, onStarlingTouch, false, 0, true );
+		}
+
+		override public function removeEventListeners() : void
+		{
+			if ( _target == null )
+			{
+				return;
+			}
+
+			_target.removeEventListener( TouchEvent.TOUCH, onStarlingTouch );
+			Starling.current.stage.removeEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
 		}
 
 		protected function onStarlingTouch( e : TouchEvent ) : void
@@ -44,7 +55,7 @@ package ru.trylogic.unitouch.adapters.starling
 					case TouchPhase.BEGAN:
 					{
 						onTouchBegin( touch.id, location.x, location.y, touch.globalX, touch.globalY );
-						if(numTouches == 1)
+						if ( numTouches == 1 )
 						{
 							Starling.current.stage.addEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
 						}
@@ -70,7 +81,7 @@ package ru.trylogic.unitouch.adapters.starling
 					case TouchPhase.ENDED:
 					{
 						onTouchEnd( touch.id, touch.globalX - location.x, touch.globalY - location.y, touch.globalX, touch.globalY );
-						if(numTouches == 0)
+						if ( numTouches == 0 )
 						{
 							Starling.current.stage.removeEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
 						}

@@ -119,5 +119,13 @@ package ru.trylogic.unitouch.adapters
 
 			return touchContext;
 		}
+
+		public function dispose() : void
+		{
+			removeEventListeners();
+			target = null;
+			_touchContexts = null;
+			_touchProcessor = null;
+		}
 	}
 }

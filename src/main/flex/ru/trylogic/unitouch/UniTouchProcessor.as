@@ -59,5 +59,18 @@ package ru.trylogic.unitouch
 				gestureRecognizers.splice( gestureRecognizers.indexOf( gestureRecognizer ), 1 );
 			}
 		}
+
+		public function get numRecognizers() : uint
+		{
+			return gestureRecognizers.length;
+		}
+
+		public function dispose() : void
+		{
+			if ( touchAdapter )
+			{
+				touchAdapter.dispose();
+			}
+		}
 	}
 }
