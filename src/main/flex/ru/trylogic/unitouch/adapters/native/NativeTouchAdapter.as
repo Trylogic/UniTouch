@@ -31,7 +31,7 @@ package ru.trylogic.unitouch.adapters.native
 				return;
 			}
 
-			_target.addEventListener( TouchEvent.TOUCH_BEGIN, onNativeTouchBegin, false, 0, true );
+			_target.addEventListener( TouchEvent.TOUCH_BEGIN, onNativeTouchBegin );
 		}
 
 		override public function removeEventListeners() : void

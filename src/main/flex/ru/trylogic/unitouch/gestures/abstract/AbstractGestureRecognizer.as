@@ -36,6 +36,11 @@ package ru.trylogic.unitouch.gestures.abstract
 
 		public function set target( value : * ) : void
 		{
+			if ( value == _target )
+			{
+				return;
+			}
+
 			var touchProcessor : ITouchProcessor;
 
 			if ( _target )
@@ -51,7 +56,7 @@ package ru.trylogic.unitouch.gestures.abstract
 					}
 				}
 
-				setState( GestureStates.POSSIBLE );
+				setState( GestureStates.CANCELED );
 			}
 
 			_target = value;
@@ -101,7 +106,8 @@ package ru.trylogic.unitouch.gestures.abstract
 
 		protected function isGestureIsOver() : Boolean
 		{
-			return  currentState == GestureStates.CANCELED ||
+			return  currentState == null ||
+					currentState == GestureStates.CANCELED ||
 					currentState == GestureStates.FAILED ||
 					currentState == GestureStates.RECOGNIZED;
 		}

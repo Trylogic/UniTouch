@@ -32,7 +32,7 @@ package ru.trylogic.unitouch.adapters.native
 				return;
 			}
 
-			_target.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown, false, 0, true );
+			_target.addEventListener( MouseEvent.MOUSE_DOWN, onMouseDown );
 		}
 
 		override public function removeEventListeners() : void
