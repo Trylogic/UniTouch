@@ -7,7 +7,7 @@
 	<groupId>ru.trylogic</groupId>
 	<artifactId>unitouch</artifactId>
 	<packaging>swc</packaging>
-	<version>0.1.5-SNAPSHOT</version>
+	<version>0.1.6-SNAPSHOT</version>
 
 	<properties>
 		<flexmojos.version>4.2-beta</flexmojos.version>
