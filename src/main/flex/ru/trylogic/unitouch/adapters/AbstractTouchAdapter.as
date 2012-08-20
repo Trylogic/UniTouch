@@ -56,10 +56,13 @@ package ru.trylogic.unitouch.adapters
 			if ( _touchProcessor )
 			{
 				var touchContext : TouchContext = getContextByTouchPointID( touchPointID );
+				touchContext._target = _target;
 				touchContext._beginX = touchContext._localX = localX;
 				touchContext._beginY = touchContext._localY = localY;
 				touchContext._beginStageX = touchContext._stageX = stageX;
 				touchContext._beginStageY = touchContext._stageY = stageY;
+				touchContext._dx = 0;
+				touchContext._dy = 0;
 				_touchProcessor.onTouchBegin( touchContext );
 			}
 
@@ -78,6 +81,8 @@ package ru.trylogic.unitouch.adapters
 			{
 				touchContext._localX = localX;
 				touchContext._localY = localY;
+				touchContext._dx = stageX - touchContext._stageX;
+				touchContext._dy = stageY - touchContext._stageY;
 				touchContext._stageX = stageX;
 				touchContext._stageY = stageY;
 				_touchProcessor.onTouchMove( touchContext );
@@ -96,6 +101,8 @@ package ru.trylogic.unitouch.adapters
 			{
 				touchContext._localX = localX;
 				touchContext._localY = localY;
+				touchContext._dx = stageX - touchContext._stageX;
+				touchContext._dy = stageY - touchContext._stageY;
 				touchContext._stageX = stageX;
 				touchContext._stageY = stageY;
 				_touchProcessor.onTouchEnd( touchContext );

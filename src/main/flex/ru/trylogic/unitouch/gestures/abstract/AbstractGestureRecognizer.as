@@ -127,9 +127,10 @@ package ru.trylogic.unitouch.gestures.abstract
 			}
 
 			_currentState = newState;
-			if ( hasEventListener( _currentState.toString() ) )
+			const eventType : String = _currentState.toString();
+			if ( hasEventListener( eventType ) )
 			{
-				dispatchEvent( new GestureEvent( _currentState.toString() ) );
+				dispatchEvent( new GestureEvent(eventType) );
 			}
 			stateChanged( oldState, _currentState );
 		}

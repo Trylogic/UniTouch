@@ -21,6 +21,9 @@ package ru.trylogic.unitouch.adapters
 		internal var _beginStageX : Number = 0;
 		internal var _beginStageY : Number = 0;
 
+		internal var _dx : Number = 0;
+		internal var _dy : Number = 0;
+
 		public static function pop() : TouchContext
 		{
 			if ( pool.length == 0 )
@@ -50,6 +53,9 @@ package ru.trylogic.unitouch.adapters
 
 			touchContext._beginStageX = 0;
 			touchContext._beginStageY = 0;
+
+			touchContext._dx = 0;
+			touchContext._dy = 0;
 			pool.push( touchContext );
 		}
 
@@ -101,6 +107,16 @@ package ru.trylogic.unitouch.adapters
 		public function get beginStageY() : Number
 		{
 			return _beginStageY;
+		}
+
+		public function get dx() : Number
+		{
+			return _dx;
+		}
+
+		public function get dy() : Number
+		{
+			return _dy;
 		}
 
 		public function TouchContext()
