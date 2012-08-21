@@ -16,7 +16,6 @@
 
 	<build>
 		<sourceDirectory>src/main/flex</sourceDirectory>
-		<testSourceDirectory>src/test/flex</testSourceDirectory>
 
 		<plugins>
 			<plugin>
@@ -28,6 +27,8 @@
 					<storepass/>
 					<skipTests>true</skipTests>
 					<skipTest>true</skipTest>
+					<debug>false</debug>
+					<optimize>true</optimize>
 				</configuration>
 				<dependencies>
 					<dependency>
