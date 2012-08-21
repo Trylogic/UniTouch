@@ -30,7 +30,7 @@ package ru.trylogic.unitouch.adapters.starling
 				return;
 			}
 
-			_target.addEventListener( TouchEvent.TOUCH, onStarlingTouch, false, 0, true );
+			(_target as DisplayObject).addEventListener( TouchEvent.TOUCH, onStarlingTouch );
 		}
 
 		override public function removeEventListeners() : void
@@ -40,7 +40,7 @@ package ru.trylogic.unitouch.adapters.starling
 				return;
 			}
 
-			_target.removeEventListener( TouchEvent.TOUCH, onStarlingTouch );
+			(_target as DisplayObject).removeEventListener( TouchEvent.TOUCH, onStarlingTouch );
 			Starling.current.stage.removeEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
 		}
 
