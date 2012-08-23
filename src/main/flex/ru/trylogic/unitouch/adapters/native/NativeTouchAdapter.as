@@ -15,8 +15,6 @@ package ru.trylogic.unitouch.adapters.native
 
 	public class NativeTouchAdapter extends AbstractTouchAdapter implements ITouchAdapter
 	{
-		private const ZERO_POINT : Point = new Point( 0, 0 );
-
 		private static const stage : Stage = IoCHelper.resolve( Stage, NativeTouchAdapter );
 
 		public function NativeTouchAdapter( touchProcessor : ITouchProcessor )
@@ -48,7 +46,7 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onNativeTouchBegin( e : TouchEvent ) : void
 		{
-			onTouchBegin( e.touchPointID, e.localX, e.localY, e.stageX, e.stageY );
+			onTouchBegin( e.touchPointID, e.stageX, e.stageY );
 			if ( numTouches == 1 )
 			{
 				stage.addEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );
@@ -58,14 +56,12 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onNativeTouchMove( e : TouchEvent ) : void
 		{
-			var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
-			onTouchMove( e.touchPointID, e.stageX - location.x, e.stageY - location.y, e.stageX, e.stageY );
+			onTouchMove( e.touchPointID, e.stageX, e.stageY );
 		}
 
 		protected function onNativeTouchEnd( e : TouchEvent ) : void
 		{
-			var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
-			onTouchEnd( e.touchPointID, e.stageX - location.x, e.stageY - location.y, e.stageX, e.stageY );
+			onTouchEnd( e.touchPointID, e.stageX, e.stageY );
 			if ( numTouches == 0 )
 			{
 				stage.removeEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );

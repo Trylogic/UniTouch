@@ -51,14 +51,12 @@ package ru.trylogic.unitouch.adapters
 		{
 		}
 
-		public final function onTouchBegin( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public final function onTouchBegin( touchPointID : int, stageX : Number, stageY : Number ) : void
 		{
 			if ( _touchProcessor )
 			{
 				var touchContext : TouchContext = getContextByTouchPointID( touchPointID );
 				touchContext._target = _target;
-				touchContext._beginX = touchContext._localX = localX;
-				touchContext._beginY = touchContext._localY = localY;
 				touchContext._beginStageX = touchContext._stageX = stageX;
 				touchContext._beginStageY = touchContext._stageY = stageY;
 				touchContext._dx = 0;
@@ -69,7 +67,7 @@ package ru.trylogic.unitouch.adapters
 			numTouches++;
 		}
 
-		public final function onTouchMove( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public final function onTouchMove( touchPointID : int, stageX : Number, stageY : Number ) : void
 		{
 			const touchContext : TouchContext = _touchContexts[touchPointID];
 			if ( touchContext == null )
@@ -79,8 +77,6 @@ package ru.trylogic.unitouch.adapters
 
 			if ( _touchProcessor )
 			{
-				touchContext._localX = localX;
-				touchContext._localY = localY;
 				touchContext._dx = stageX - touchContext._stageX;
 				touchContext._dy = stageY - touchContext._stageY;
 				touchContext._stageX = stageX;
@@ -89,7 +85,7 @@ package ru.trylogic.unitouch.adapters
 			}
 		}
 
-		public final function onTouchEnd( touchPointID : int, localX : Number, localY : Number, stageX : Number, stageY : Number ) : void
+		public final function onTouchEnd( touchPointID : int, stageX : Number, stageY : Number ) : void
 		{
 			const touchContext : TouchContext = _touchContexts[touchPointID];
 			if ( touchContext == null )
@@ -99,8 +95,6 @@ package ru.trylogic.unitouch.adapters
 
 			if ( _touchProcessor )
 			{
-				touchContext._localX = localX;
-				touchContext._localY = localY;
 				touchContext._dx = stageX - touchContext._stageX;
 				touchContext._dy = stageY - touchContext._stageY;
 				touchContext._stageX = stageX;

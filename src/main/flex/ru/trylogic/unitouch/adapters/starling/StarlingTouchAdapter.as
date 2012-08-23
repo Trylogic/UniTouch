@@ -54,7 +54,7 @@ package ru.trylogic.unitouch.adapters.starling
 				{
 					case TouchPhase.BEGAN:
 					{
-						onTouchBegin( touch.id, location.x, location.y, touch.globalX, touch.globalY );
+						onTouchBegin( touch.id, touch.globalX, touch.globalY );
 						if ( numTouches == 1 )
 						{
 							Starling.current.stage.addEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
@@ -75,12 +75,12 @@ package ru.trylogic.unitouch.adapters.starling
 				{
 					case TouchPhase.MOVED:
 					{
-						onTouchMove( touch.id, touch.globalX - location.x, touch.globalY - location.y, touch.globalX, touch.globalY );
+						onTouchMove( touch.id, touch.globalX, touch.globalY );
 					}
 						break;
 					case TouchPhase.ENDED:
 					{
-						onTouchEnd( touch.id, touch.globalX - location.x, touch.globalY - location.y, touch.globalX, touch.globalY );
+						onTouchEnd( touch.id, touch.globalX, touch.globalY );
 						if ( numTouches == 0 )
 						{
 							Starling.current.stage.removeEventListener( TouchEvent.TOUCH, onStarlingStageTouch );

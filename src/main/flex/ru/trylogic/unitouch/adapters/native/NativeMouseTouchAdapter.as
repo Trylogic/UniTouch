@@ -16,8 +16,6 @@ package ru.trylogic.unitouch.adapters.native
 
 	public class NativeMouseTouchAdapter extends AbstractTouchAdapter implements ITouchAdapter
 	{
-		private const ZERO_POINT : Point = new Point( 0, 0 );
-
 		private static const stage : Stage = IoCHelper.resolve( Stage, NativeMouseTouchAdapter );
 
 		public function NativeMouseTouchAdapter( touchProcessor : ITouchProcessor )
@@ -49,7 +47,7 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onMouseDown( e : MouseEvent ) : void
 		{
-			onTouchBegin( 0, e.localX, e.localY, e.stageX, e.stageY );
+			onTouchBegin( 0, e.stageX, e.stageY );
 			if ( numTouches == 1 )
 			{
 				stage.addEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
@@ -59,14 +57,12 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onMouseMove( e : MouseEvent ) : void
 		{
-			var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
-			onTouchMove( 0, e.stageX - location.x, e.stageY - location.y, e.stageX, e.stageY );
+			onTouchMove( 0, e.stageX, e.stageY );
 		}
 
 		protected function onMouseUp( e : MouseEvent ) : void
 		{
-			var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
-			onTouchEnd( 0, e.stageX - location.x, e.stageY - location.y, e.stageX, e.stageY );
+			onTouchEnd( 0, e.stageX, e.stageY );
 			if ( numTouches == 0 )
 			{
 				stage.removeEventListener( MouseEvent.MOUSE_MOVE, onMouseMove );
