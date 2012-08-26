@@ -21,7 +21,7 @@ import tl.adapters.starling.StarlingViewContainerAdapter;
 import tl.factory.ConstructorFactory;
 
 import tl.ioc.IoCHelper;
-import tl.view.IViewContainerAdapter;
+import tl.adapters.IViewContainerAdapter;
 
 class StaticConstruct
 {
