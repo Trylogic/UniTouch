@@ -7,7 +7,7 @@
 	<groupId>ru.trylogic</groupId>
 	<artifactId>unitouch</artifactId>
 	<packaging>swc</packaging>
-	<version>0.1.6-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 
 	<properties>
 		<flexmojos.version>4.2-beta</flexmojos.version>
@@ -43,21 +43,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>ru.trylogic</groupId>
-			<artifactId>trylogic-framework</artifactId>
-			<version>[2.0.0-rc1-SNAPSHOT,]</version>
-			<type>swc</type>
-			<scope>external</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>ru.trylogic</groupId>
-			<artifactId>insulin</artifactId>
-			<version>[1.1.4-SNAPSHOT, ]</version>
-			<type>swc</type>
-			<scope>external</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>com.gamua</groupId>

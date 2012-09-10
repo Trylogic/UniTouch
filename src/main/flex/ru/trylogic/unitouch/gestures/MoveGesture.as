@@ -3,7 +3,7 @@ package ru.trylogic.unitouch.gestures
 
 	import flash.system.Capabilities;
 
-	import ru.trylogic.unitouch.adapters.TouchContext;
+	import ru.trylogic.unitouch.processor.TouchContext;
 	import ru.trylogic.unitouch.gestures.abstract.AbstractGestureRecognizer;
 	import ru.trylogic.unitouch.gestures.abstract.states.GestureState;
 	import ru.trylogic.unitouch.gestures.abstract.states.GestureStates;

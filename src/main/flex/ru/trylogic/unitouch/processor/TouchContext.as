@@ -1,4 +1,4 @@
-package ru.trylogic.unitouch.adapters
+package ru.trylogic.unitouch.processor
 {
 
 	public class TouchContext

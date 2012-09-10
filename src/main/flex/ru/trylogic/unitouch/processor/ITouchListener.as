@@ -1,12 +1,12 @@
-package ru.trylogic.unitouch
+package ru.trylogic.unitouch.processor
 {
-
-	import ru.trylogic.unitouch.adapters.TouchContext;
 
 	public interface ITouchListener
 	{
 		function onTouchBegin( context : TouchContext ) : void;
+
 		function onTouchMove( context : TouchContext ) : void;
+
 		function onTouchEnd( context : TouchContext ) : void;
 	}
 }

@@ -4,21 +4,16 @@ package ru.trylogic.unitouch.gestures
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
 
-	import ru.trylogic.unitouch.adapters.TouchContext;
+	import ru.trylogic.unitouch.processor.TouchContext;
 	import ru.trylogic.unitouch.gestures.abstract.states.*;
 
 	public class TapGesture extends MoveGesture
 	{
-		protected var tapTimer : Timer = new Timer( 3000, 1 );
+		protected var tapDelay : uint = 3000;
+		protected var tapTimer : Timer;// = new Timer( 3000, 1 );
 
 		public function TapGesture()
 		{
-			tapTimer.addEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
-		}
-
-		protected function tapTimer_timerComplete( event : TimerEvent ) : void
-		{
-			setState( GestureStates.FAILED );
 		}
 
 		override protected function internalOnTouchMove( context : TouchContext ) : void
@@ -46,6 +41,8 @@ package ru.trylogic.unitouch.gestures
 
 			if ( currentState == GestureStates.POSSIBLE )
 			{
+				tapTimer = new Timer( tapDelay, 1 );
+				tapTimer.addEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
 				tapTimer.start();
 			}
 
@@ -53,7 +50,14 @@ package ru.trylogic.unitouch.gestures
 			{
 				tapTimer.stop();
 				tapTimer.reset();
+				tapTimer.removeEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
+				tapTimer = null;
 			}
+		}
+
+		protected function tapTimer_timerComplete( event : TimerEvent ) : void
+		{
+			setState( GestureStates.FAILED );
 		}
 	}
 }

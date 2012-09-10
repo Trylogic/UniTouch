@@ -1,28 +1,26 @@
 package ru.trylogic.unitouch.adapters.native
 {
 
-	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.events.TouchEvent;
-	import flash.geom.Point;
+
+	import ru.trylogic.unitouch.UniTouch;
 
 	import ru.trylogic.unitouch.adapters.AbstractTouchAdapter;
 
 	import ru.trylogic.unitouch.adapters.ITouchAdapter;
-	import ru.trylogic.unitouch.ITouchProcessor;
-
-	import tl.ioc.IoCHelper;
+	import ru.trylogic.unitouch.processor.ITouchProcessor;
 
 	public class NativeTouchAdapter extends AbstractTouchAdapter implements ITouchAdapter
 	{
-		private static const stage : Stage = IoCHelper.resolve( Stage, NativeTouchAdapter );
+		protected const stage : Stage = UniTouch.stage;
 
 		public function NativeTouchAdapter( touchProcessor : ITouchProcessor )
 		{
 			super( touchProcessor );
 		}
 
-		override public function addEventListeners() : void
+		override public function installTarget() : void
 		{
 			if ( _target == null )
 			{
@@ -32,7 +30,7 @@ package ru.trylogic.unitouch.adapters.native
 			_target.addEventListener( TouchEvent.TOUCH_BEGIN, onNativeTouchBegin );
 		}
 
-		override public function removeEventListeners() : void
+		override public function uninstallTarget() : void
 		{
 			if ( _target == null )
 			{
@@ -46,8 +44,8 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onNativeTouchBegin( e : TouchEvent ) : void
 		{
-			onTouchBegin( e.touchPointID, e.stageX, e.stageY );
-			if ( numTouches == 1 )
+			onRawTouchBegin( e.touchPointID, e.stageX, e.stageY );
+			if ( _numTouches == 1 )
 			{
 				stage.addEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );
 				stage.addEventListener( TouchEvent.TOUCH_END, onNativeTouchEnd );
@@ -56,13 +54,13 @@ package ru.trylogic.unitouch.adapters.native
 
 		protected function onNativeTouchMove( e : TouchEvent ) : void
 		{
-			onTouchMove( e.touchPointID, e.stageX, e.stageY );
+			onRawTouchMove( e.touchPointID, e.stageX, e.stageY );
 		}
 
 		protected function onNativeTouchEnd( e : TouchEvent ) : void
 		{
-			onTouchEnd( e.touchPointID, e.stageX, e.stageY );
-			if ( numTouches == 0 )
+			onRawTouchEnd( e.touchPointID, e.stageX, e.stageY );
+			if ( _numTouches == 0 )
 			{
 				stage.removeEventListener( TouchEvent.TOUCH_MOVE, onNativeTouchMove );
 				stage.removeEventListener( TouchEvent.TOUCH_END, onNativeTouchEnd );

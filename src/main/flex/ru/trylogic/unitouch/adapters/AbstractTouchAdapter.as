@@ -1,131 +1,63 @@
 package ru.trylogic.unitouch.adapters
 {
 
-	import ru.trylogic.unitouch.ITouchProcessor;
+	import ru.trylogic.unitouch.processor.IRawTouchListener;
+	import ru.trylogic.unitouch.processor.ITouchProcessor;
 
-	public class AbstractTouchAdapter implements ITouchAdapter
+	public class AbstractTouchAdapter implements ITouchAdapter, IRawTouchListener
 	{
 		protected var _target : *;
 
+		protected var _numTouches : uint = 0;
+
 		protected var _touchProcessor : ITouchProcessor;
 
-		protected var _touchContexts : Array = [];
-
-		protected var numTouches : int = 0;
-
-		public function set target( value : * ) : void
+		public function get numTouches() : uint
 		{
-			if ( value == _target )
-			{
-				return;
-			}
+			return _numTouches;
+		}
 
-			if ( _target )
-			{
-				removeEventListeners();
-				for ( var key : String in _touchContexts )
-				{
-					TouchContext.push( _touchContexts[key] );
-				}
-
-				_touchContexts = [];
-			}
-
-			_target = value;
-			if ( _target )
-			{
-				addEventListeners();
-			}
+		public function get target() : *
+		{
+			return _target;
 		}
 
 		public function AbstractTouchAdapter( touchProcessor : ITouchProcessor )
 		{
-			_touchProcessor = touchProcessor;
+			this._touchProcessor = touchProcessor;
+			this._target = _touchProcessor.target;
+			installTarget();
 		}
 
-		public function addEventListeners() : void
+		public function installTarget() : void
 		{
 		}
 
-		public function removeEventListeners() : void
+		public function uninstallTarget() : void
 		{
 		}
 
-		public final function onTouchBegin( touchPointID : int, stageX : Number, stageY : Number ) : void
+		public final function onRawTouchBegin( touchPointID : int, stageX : Number, stageY : Number ) : void
 		{
-			if ( _touchProcessor )
-			{
-				var touchContext : TouchContext = getContextByTouchPointID( touchPointID );
-				touchContext._target = _target;
-				touchContext._beginStageX = touchContext._stageX = stageX;
-				touchContext._beginStageY = touchContext._stageY = stageY;
-				touchContext._dx = 0;
-				touchContext._dy = 0;
-				_touchProcessor.onTouchBegin( touchContext );
-			}
-
-			numTouches++;
+			_numTouches++;
+			_touchProcessor.onRawTouchBegin( touchPointID, stageX, stageY );
 		}
 
-		public final function onTouchMove( touchPointID : int, stageX : Number, stageY : Number ) : void
+		public final function onRawTouchMove( touchPointID : int, stageX : Number, stageY : Number ) : void
 		{
-			const touchContext : TouchContext = _touchContexts[touchPointID];
-			if ( touchContext == null )
-			{
-				return;
-			}
-
-			if ( _touchProcessor )
-			{
-				touchContext._dx = stageX - touchContext._stageX;
-				touchContext._dy = stageY - touchContext._stageY;
-				touchContext._stageX = stageX;
-				touchContext._stageY = stageY;
-				_touchProcessor.onTouchMove( touchContext );
-			}
+			_touchProcessor.onRawTouchMove( touchPointID, stageX, stageY );
 		}
 
-		public final function onTouchEnd( touchPointID : int, stageX : Number, stageY : Number ) : void
+		public final function onRawTouchEnd( touchPointID : int, stageX : Number, stageY : Number ) : void
 		{
-			const touchContext : TouchContext = _touchContexts[touchPointID];
-			if ( touchContext == null )
-			{
-				return;
-			}
-
-			if ( _touchProcessor )
-			{
-				touchContext._dx = stageX - touchContext._stageX;
-				touchContext._dy = stageY - touchContext._stageY;
-				touchContext._stageX = stageX;
-				touchContext._stageY = stageY;
-				_touchProcessor.onTouchEnd( touchContext );
-				TouchContext.push( touchContext );
-				delete _touchContexts[touchPointID];
-			}
-
-			numTouches--;
-		}
-
-		protected function getContextByTouchPointID( touchPointID : int ) : TouchContext
-		{
-			var touchContext : TouchContext = _touchContexts[touchPointID];
-
-			if ( touchContext == null )
-			{
-				_touchContexts[touchPointID] = touchContext = TouchContext.pop();
-			}
-
-			touchContext._touchPointID = touchPointID;
-
-			return touchContext;
+			_touchProcessor.onRawTouchEnd( touchPointID, stageX, stageY );
+			_numTouches--;
 		}
 
 		public function dispose() : void
 		{
-			removeEventListeners();
-			target = null;
-			_touchContexts = null;
+			uninstallTarget();
+			_target = null;
 			_touchProcessor = null;
 		}
 	}

@@ -3,7 +3,7 @@ package ru.trylogic.unitouch.gestures
 
 	import flash.events.TimerEvent;
 
-	import ru.trylogic.unitouch.adapters.TouchContext;
+	import ru.trylogic.unitouch.processor.TouchContext;
 	import ru.trylogic.unitouch.gestures.abstract.states.GestureStates;
 
 	public class TapAndHoldGesture extends TapGesture
@@ -12,16 +12,16 @@ package ru.trylogic.unitouch.gestures
 		{
 		}
 
-		override protected function tapTimer_timerComplete(e : TimerEvent) : void
+		override protected function tapTimer_timerComplete( e : TimerEvent ) : void
 		{
 			setState( GestureStates.RECOGNIZED );
 		}
 
 		override protected function internalOnTouchEnd( context : TouchContext ) : void
 		{
-			if(context == currentTouchContext)
+			if ( context == currentTouchContext )
 			{
-				setState(GestureStates.FAILED);
+				setState( GestureStates.FAILED );
 			}
 		}
 	}

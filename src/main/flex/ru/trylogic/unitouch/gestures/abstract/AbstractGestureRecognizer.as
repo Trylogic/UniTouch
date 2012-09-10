@@ -2,13 +2,11 @@ package ru.trylogic.unitouch.gestures.abstract
 {
 
 	import flash.events.EventDispatcher;
-	import flash.utils.Dictionary;
 
-	import ru.trylogic.unitouch.ITouchListener;
-	import ru.trylogic.unitouch.ITouchProcessor;
-	import ru.trylogic.unitouch.UniTouchProcessor;
-	import ru.trylogic.unitouch.adapters.TouchContext;
+	import ru.trylogic.unitouch.processor.ITouchListener;
+	import ru.trylogic.unitouch.UniTouch;
 	import ru.trylogic.unitouch.gestures.abstract.states.*;
+	import ru.trylogic.unitouch.processor.TouchContext;
 
 	[Event(name="gesturePossible", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
 	[Event(name="gestureBegan", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
@@ -19,7 +17,6 @@ package ru.trylogic.unitouch.gestures.abstract
 	[Event(name="gestureIdle", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
 	public class AbstractGestureRecognizer extends EventDispatcher implements ITouchListener
 	{
-		protected static const touchProcessorsByTarget : Dictionary = new Dictionary( true );
 		protected var _target : *;
 
 		private var _currentState : GestureState;
@@ -41,20 +38,9 @@ package ru.trylogic.unitouch.gestures.abstract
 				return;
 			}
 
-			var touchProcessor : ITouchProcessor;
-
 			if ( _target )
 			{
-				touchProcessor = touchProcessorsByTarget[_target];
-				if ( touchProcessor )
-				{
-					touchProcessor.removeGestureRecognizer( this );
-					if ( touchProcessor.numRecognizers == 0 )
-					{
-						touchProcessor.dispose();
-						delete touchProcessorsByTarget[_target];
-					}
-				}
+				UniTouch.getTouchProcessor( _target ).removeTouchListener( this );
 
 				setState( GestureStates.CANCELED );
 			}
@@ -63,13 +49,7 @@ package ru.trylogic.unitouch.gestures.abstract
 
 			if ( _target )
 			{
-				touchProcessor = touchProcessorsByTarget[_target];
-				if ( !touchProcessor )
-				{
-					touchProcessorsByTarget[_target] = touchProcessor = new UniTouchProcessor( _target );
-				}
-
-				touchProcessor.addGestureRecognizer( this );
+				UniTouch.getTouchProcessor( _target ).addTouchListener( this );
 			}
 		}
 
@@ -79,7 +59,6 @@ package ru.trylogic.unitouch.gestures.abstract
 
 		public function dispose() : void
 		{
-			var touchProcessor : ITouchProcessor = touchProcessorsByTarget[_target];
 			target = null;
 		}
 
@@ -130,7 +109,7 @@ package ru.trylogic.unitouch.gestures.abstract
 			const eventType : String = _currentState.toString();
 			if ( hasEventListener( eventType ) )
 			{
-				dispatchEvent( new GestureEvent(eventType) );
+				dispatchEvent( new GestureEvent( eventType ) );
 			}
 			stateChanged( oldState, _currentState );
 		}

@@ -1,10 +1,8 @@
 package ru.trylogic.unitouch.adapters.starling
 {
 
-	import flash.geom.Point;
-
-	import ru.trylogic.unitouch.ITouchProcessor;
 	import ru.trylogic.unitouch.adapters.AbstractTouchAdapter;
+	import ru.trylogic.unitouch.processor.ITouchProcessor;
 
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
@@ -16,14 +14,12 @@ package ru.trylogic.unitouch.adapters.starling
 
 	public class StarlingTouchAdapter extends AbstractTouchAdapter
 	{
-		private const ZERO_POINT : Point = new Point( 0, 0 );
-
 		public function StarlingTouchAdapter( touchProcessor : ITouchProcessor )
 		{
 			super( touchProcessor );
 		}
 
-		override public function addEventListeners() : void
+		override public function installTarget() : void
 		{
 			if ( _target == null )
 			{
@@ -33,7 +29,7 @@ package ru.trylogic.unitouch.adapters.starling
 			(_target as DisplayObject).addEventListener( TouchEvent.TOUCH, onStarlingTouch );
 		}
 
-		override public function removeEventListeners() : void
+		override public function uninstallTarget() : void
 		{
 			if ( _target == null )
 			{
@@ -49,13 +45,12 @@ package ru.trylogic.unitouch.adapters.starling
 			var touch : Touch = e.getTouch( _target );
 			if ( touch )
 			{
-				var location : Point = touch.getLocation( _target );
 				switch ( touch.phase )
 				{
 					case TouchPhase.BEGAN:
 					{
-						onTouchBegin( touch.id, touch.globalX, touch.globalY );
-						if ( numTouches == 1 )
+						onRawTouchBegin( touch.id, touch.globalX, touch.globalY );
+						if ( _numTouches == 1 )
 						{
 							Starling.current.stage.addEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
 						}
@@ -70,18 +65,17 @@ package ru.trylogic.unitouch.adapters.starling
 			var touch : Touch = e.getTouch( Starling.current.stage );
 			if ( touch )
 			{
-				var location : Point = (_target as DisplayObject).localToGlobal( ZERO_POINT );
 				switch ( touch.phase )
 				{
 					case TouchPhase.MOVED:
 					{
-						onTouchMove( touch.id, touch.globalX, touch.globalY );
+						onRawTouchMove( touch.id, touch.globalX, touch.globalY );
 					}
 						break;
 					case TouchPhase.ENDED:
 					{
-						onTouchEnd( touch.id, touch.globalX, touch.globalY );
-						if ( numTouches == 0 )
+						onRawTouchEnd( touch.id, touch.globalX, touch.globalY );
+						if ( _numTouches == 0 )
 						{
 							Starling.current.stage.removeEventListener( TouchEvent.TOUCH, onStarlingStageTouch );
 						}
