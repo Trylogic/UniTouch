@@ -9,7 +9,7 @@ package ru.trylogic.unitouch.gestures
 
 	public class TapGesture extends MoveGesture
 	{
-		protected var tapDelay : uint = 3000;
+		public var tapDelay : uint = 3000;
 		protected var tapTimer : Timer;// = new Timer( 3000, 1 );
 
 		public function TapGesture()
@@ -39,7 +39,7 @@ package ru.trylogic.unitouch.gestures
 		{
 			super.stateChanged( oldState, newState );
 
-			if ( currentState == GestureStates.POSSIBLE )
+			if ( currentState == GestureStates.POSSIBLE && tapDelay != uint.MAX_VALUE )
 			{
 				tapTimer = new Timer( tapDelay, 1 );
 				tapTimer.addEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
@@ -48,10 +48,13 @@ package ru.trylogic.unitouch.gestures
 
 			if ( isGestureIsOver() )
 			{
-				tapTimer.stop();
-				tapTimer.reset();
-				tapTimer.removeEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
-				tapTimer = null;
+				if ( tapTimer )
+				{
+					tapTimer.stop();
+					tapTimer.reset();
+					tapTimer.removeEventListener( TimerEvent.TIMER_COMPLETE, tapTimer_timerComplete );
+					tapTimer = null;
+				}
 			}
 		}
 
