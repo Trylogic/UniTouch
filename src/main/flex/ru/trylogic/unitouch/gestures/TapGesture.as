@@ -10,7 +10,7 @@ package ru.trylogic.unitouch.gestures
 	public class TapGesture extends MoveGesture
 	{
 		public var tapDelay : uint = 3000;
-		protected var tapTimer : Timer;// = new Timer( 3000, 1 );
+		protected var tapTimer : Timer;
 
 		public function TapGesture()
 		{
@@ -20,7 +20,7 @@ package ru.trylogic.unitouch.gestures
 		{
 			if ( context == currentTouchContext )
 			{
-				if ( slop == 0 || calculateDistance( context ) > slop )
+				if ( checkSlop( context ) )
 				{
 					setState( GestureStates.FAILED );
 				}

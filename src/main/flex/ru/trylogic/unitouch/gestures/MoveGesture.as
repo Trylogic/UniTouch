@@ -10,9 +10,26 @@ package ru.trylogic.unitouch.gestures
 
 	public class MoveGesture extends AbstractGestureRecognizer
 	{
-		public var slop : uint = 4 * Math.round( 20 / 252 * flash.system.Capabilities.screenDPI );
+		protected var _slop : uint = 4 * Math.round( 20 / 252 * flash.system.Capabilities.screenDPI );
+		private var _slopInSquare : uint = _slop * _slop;
 
 		protected var _currentTouchContext : TouchContext;
+
+		public function get slop() : uint
+		{
+			return _slop;
+		}
+
+		public function set slop( value : uint ) : void
+		{
+			if ( _slop == value )
+			{
+				return;
+			}
+
+			_slop = value;
+			_slopInSquare = _slop * _slop;
+		}
 
 		public function get currentTouchContext() : TouchContext
 		{
@@ -23,12 +40,22 @@ package ru.trylogic.unitouch.gestures
 		{
 		}
 
-		protected function calculateDistance( context : TouchContext ) : Number
+		protected function checkSlop( context : TouchContext ) : Boolean
 		{
+			if ( _slop == 0 )
+			{
+				return true;
+			}
+
 			const dx : Number = context.beginStageX - context.stageX;
 			const dy : Number = context.beginStageY - context.stageY;
 
-			return Math.sqrt( dx * dx + dy * dy );
+			if ( _slop == 1 && (dx == 1 || dy == 1) )
+			{
+				return true;
+			}
+
+			return ( dx * dx + dy * dy ) > _slopInSquare;
 		}
 
 		override protected function internalOnTouchBegin( context : TouchContext ) : void
@@ -54,7 +81,7 @@ package ru.trylogic.unitouch.gestures
 				}
 				else
 				{
-					if ( slop == 0 || calculateDistance( context ) > slop )
+					if ( checkSlop( context ) )
 					{
 						setState( GestureStates.BEGAN );
 					}
