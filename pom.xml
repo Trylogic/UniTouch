@@ -27,7 +27,7 @@
 					<storepass/>
 					<skipTests>true</skipTests>
 					<skipTest>true</skipTest>
-					<debug>false</debug>
+					<debug>true</debug>
 					<optimize>true</optimize>
 				</configuration>
 				<dependencies>
