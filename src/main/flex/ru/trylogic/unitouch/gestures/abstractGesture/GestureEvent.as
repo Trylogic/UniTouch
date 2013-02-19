@@ -1,9 +1,9 @@
-package ru.trylogic.unitouch.gestures.abstract
+package ru.trylogic.unitouch.gestures.abstractGesture
 {
 
 	import flash.events.Event;
 
-	import ru.trylogic.unitouch.gestures.abstract.states.GestureStates;
+	import ru.trylogic.unitouch.gestures.abstractGesture.states.GestureStates;
 
 	public class GestureEvent extends Event
 	{

@@ -1,20 +1,20 @@
-package ru.trylogic.unitouch.gestures.abstract
+package ru.trylogic.unitouch.gestures.abstractGesture
 {
 
 	import flash.events.EventDispatcher;
 
 	import ru.trylogic.unitouch.processor.ITouchListener;
 	import ru.trylogic.unitouch.UniTouch;
-	import ru.trylogic.unitouch.gestures.abstract.states.*;
+	import ru.trylogic.unitouch.gestures.abstractGesture.states.*;
 	import ru.trylogic.unitouch.processor.TouchContext;
 
-	[Event(name="gesturePossible", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
-	[Event(name="gestureBegan", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
-	[Event(name="gestureChanged", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
-	[Event(name="gestureRecognized", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
-	[Event(name="gestureFailed", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
-	[Event(name="gestureCanceled", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
-	[Event(name="gestureIdle", type="ru.trylogic.unitouch.gestures.abstract.GestureEvent")]
+	[Event(name="gesturePossible", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
+	[Event(name="gestureBegan", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
+	[Event(name="gestureChanged", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
+	[Event(name="gestureRecognized", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
+	[Event(name="gestureFailed", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
+	[Event(name="gestureCanceled", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
+	[Event(name="gestureIdle", type="ru.trylogic.unitouch.gestures.abstractGesture.GestureEvent")]
 	public class AbstractGestureRecognizer extends EventDispatcher implements ITouchListener
 	{
 		protected var _target : *;

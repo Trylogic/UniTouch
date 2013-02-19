@@ -1,4 +1,4 @@
-package ru.trylogic.unitouch.adapters.native
+package ru.trylogic.unitouch.adapters.nativeDisplayList
 {
 
 	import flash.display.Stage;

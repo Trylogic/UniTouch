@@ -4,7 +4,7 @@ package ru.trylogic.unitouch.gestures
 	import flash.events.TimerEvent;
 
 	import ru.trylogic.unitouch.processor.TouchContext;
-	import ru.trylogic.unitouch.gestures.abstract.states.GestureStates;
+	import ru.trylogic.unitouch.gestures.abstractGesture.states.GestureStates;
 
 	public class TapAndHoldGesture extends TapGesture
 	{

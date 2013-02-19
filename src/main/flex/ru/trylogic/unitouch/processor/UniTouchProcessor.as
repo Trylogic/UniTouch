@@ -6,8 +6,8 @@ package ru.trylogic.unitouch.processor
 	import flash.ui.Multitouch;
 
 	import ru.trylogic.unitouch.adapters.ITouchAdapter;
-	import ru.trylogic.unitouch.adapters.native.NativeMouseTouchAdapter;
-	import ru.trylogic.unitouch.adapters.native.NativeTouchAdapter;
+	import ru.trylogic.unitouch.adapters.nativeDisplayList.NativeMouseTouchAdapter;
+	import ru.trylogic.unitouch.adapters.nativeDisplayList.NativeTouchAdapter;
 	import ru.trylogic.unitouch.adapters.starling.StarlingTouchAdapter;
 
 	public class UniTouchProcessor implements ITouchProcessor
@@ -41,6 +41,7 @@ package ru.trylogic.unitouch.processor
 		{
 			this._target = source;
 
+			// TODO: remove it
 			if ( source is DisplayObject )
 			{
 				if ( Multitouch.supportsTouchEvents )

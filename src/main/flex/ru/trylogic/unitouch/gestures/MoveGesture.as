@@ -4,9 +4,9 @@ package ru.trylogic.unitouch.gestures
 	import flash.system.Capabilities;
 
 	import ru.trylogic.unitouch.processor.TouchContext;
-	import ru.trylogic.unitouch.gestures.abstract.AbstractGestureRecognizer;
-	import ru.trylogic.unitouch.gestures.abstract.states.GestureState;
-	import ru.trylogic.unitouch.gestures.abstract.states.GestureStates;
+	import ru.trylogic.unitouch.gestures.abstractGesture.AbstractGestureRecognizer;
+	import ru.trylogic.unitouch.gestures.abstractGesture.states.GestureState;
+	import ru.trylogic.unitouch.gestures.abstractGesture.states.GestureStates;
 
 	public class MoveGesture extends AbstractGestureRecognizer
 	{

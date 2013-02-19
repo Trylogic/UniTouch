@@ -1,4 +1,4 @@
-package ru.trylogic.unitouch.gestures.abstract.states
+package ru.trylogic.unitouch.gestures.abstractGesture.states
 {
 
 	internal class CanceledGestureState extends GestureState
